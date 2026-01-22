@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Card, Button, Spinner, Badge, ListGroup } from 'react-bootstrap';
+import { Container, Row, Col, Card, Button, Spinner, Badge, ListGroup, Modal } from 'react-bootstrap';
 import { useParams, useNavigate } from 'react-router';
 import { FaEnvelope, FaPhone, FaMapMarkerAlt, FaBirthdayCake, FaVenusMars, FaHospital, FaCalendarAlt, FaClock, FaArrowLeft } from 'react-icons/fa';
 import api from '~/services/api';
@@ -10,6 +10,16 @@ const DoctorDetail = () => {
     const [doctor, setDoctor] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+    const [availabilityDate] = useState(() => {
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        return tomorrow.toISOString().split('T')[0];
+    });
+    const [busyTimes, setBusyTimes] = useState([]);
+    const [loadingAvailability, setLoadingAvailability] = useState(false);
+    const [availabilityError, setAvailabilityError] = useState('');
+    const [showBusyDetail, setShowBusyDetail] = useState(false);
+    const [selectedBusyTime, setSelectedBusyTime] = useState('');
 
     useEffect(() => {
         const fetchDoctorDetail = async () => {
@@ -29,6 +39,33 @@ const DoctorDetail = () => {
 
         fetchDoctorDetail();
     }, [id]);
+
+    useEffect(() => {
+        const fetchAvailability = async () => {
+            if (!id || !availabilityDate) {
+                return;
+            }
+
+            try {
+                setLoadingAvailability(true);
+                setAvailabilityError('');
+                const response = await api.get('/appointments/availability', {
+                    params: { doctor_id: id, date: availabilityDate }
+                });
+                if (response.data.success) {
+                    setBusyTimes(response.data.data?.busy_times || []);
+                }
+            } catch (err) {
+                console.error('Error fetching availability:', err);
+                setAvailabilityError('Không thể tải lịch đã hẹn');
+                setBusyTimes([]);
+            } finally {
+                setLoadingAvailability(false);
+            }
+        };
+
+        fetchAvailability();
+    }, [id, availabilityDate]);
 
     const formatDate = (dateString) => {
         const date = new Date(dateString);
@@ -51,6 +88,16 @@ const DoctorDetail = () => {
     const handleBookAppointment = () => {
         // Navigate to appointment booking page with doctor info
         navigate(`/dat-lich?doctor_id=${id}`);
+    };
+
+    const handleBusyClick = (time) => {
+        setSelectedBusyTime(time);
+        setShowBusyDetail(true);
+    };
+
+    const formatShortDate = (dateString) => {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('vi-VN');
     };
 
     if (loading) {
@@ -147,6 +194,94 @@ const DoctorDetail = () => {
                             </Card.Body>
                         </Card>
                     )}
+
+                    {/* Booked Schedule */}
+                    <Card className="shadow-sm mb-4">
+                        <Card.Header className="bg-white">
+                            <h5 className="mb-0 fw-bold">
+                                <FaCalendarAlt className="me-2 text-primary" />
+                                Lịch đã hẹn
+                            </h5>
+                        </Card.Header>
+                        <Card.Body>
+                            <div className="mb-3 text-muted">
+                                Ngày mai: {formatShortDate(availabilityDate)}
+                            </div>
+
+                            {loadingAvailability && (
+                                <div className="text-muted mb-3">
+                                    <Spinner animation="border" size="sm" className="me-2" />
+                                    Đang tải lịch...
+                                </div>
+                            )}
+
+                            {availabilityError && (
+                                <div className="text-danger mb-3">{availabilityError}</div>
+                            )}
+
+                            {!loadingAvailability && !availabilityError && (
+                                <div>
+                                    {busyTimes.length === 0 ? (
+                                        <div className="text-muted">Không có lịch hẹn cho ngày mai.</div>
+                                    ) : (
+                                        <div className="d-flex flex-wrap gap-2">
+                                            {busyTimes.map(time => (
+                                                <Badge
+                                                    bg="secondary"
+                                                    key={time}
+                                                    className="px-3 py-2"
+                                                    role="button"
+                                                    style={{ cursor: 'pointer' }}
+                                                    onClick={() => handleBusyClick(time)}
+                                                >
+                                                    {time}
+                                                </Badge>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+
+                            {!loadingAvailability && !availabilityError && busyTimes.length === 0 && (
+                                <Button
+                                    variant="primary"
+                                    className="mt-3"
+                                    onClick={handleBookAppointment}
+                                >
+                                    <FaCalendarAlt className="me-2" />
+                                    Đặt lịch ngay
+                                </Button>
+                            )}
+                        </Card.Body>
+                    </Card>
+
+                    <Modal show={showBusyDetail} onHide={() => setShowBusyDetail(false)} centered>
+                        <Modal.Header closeButton>
+                            <Modal.Title>Chi tiết lịch hẹn</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            <div className="mb-2">
+                                <strong>Bác sĩ:</strong> {doctor.user?.name}
+                            </div>
+                            <div className="mb-2">
+                                <strong>Ngày:</strong> {formatShortDate(availabilityDate)}
+                            </div>
+                            <div className="mb-2">
+                                <strong>Giờ:</strong> {selectedBusyTime}
+                            </div>
+                            <div className="mb-2">
+                                <strong>Địa chỉ:</strong> Quận 3, TP. Hồ Chí Minh
+                            </div>
+                            <div className="text-muted">
+                                Lịch đã được đặt.
+                            </div>
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <Button variant="secondary" onClick={() => setShowBusyDetail(false)}>
+                                Đóng
+                            </Button>
+                        </Modal.Footer>
+                    </Modal>
 
                     {/* Contact Information */}
                     <Card className="shadow-sm mb-4">

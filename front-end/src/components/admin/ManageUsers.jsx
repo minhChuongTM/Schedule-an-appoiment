@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button, Modal, Form, Alert, Badge } from 'react-bootstrap';
-import { FaEye, FaUserShield } from 'react-icons/fa';
+import { FaEye, FaUserShield, FaTrash } from 'react-icons/fa';
 import api from '../../services/api';
 
 const ManageUsers = () => {
@@ -63,9 +63,31 @@ const ManageUsers = () => {
             });
             setSuccess('Cập nhật vai trò thành công!');
             setShowRoleModal(false);
-            fetchUsers();
+            fetchUsers(); // Refetch to get updated list
         } catch (err) {
             setError(err.response?.data?.message || 'Cập nhật thất bại');
+        }
+    };
+
+    const handleDelete = async (user) => {
+        setError('');
+        setSuccess('');
+
+        if (user.role === 'admin') {
+            setError('Không thể xóa tài khoản Quản trị viên.');
+            return;
+        }
+
+        if (window.confirm(`Bạn có chắc chắn muốn xóa người dùng "${user.name}" không? Hành động này không thể hoàn tác.`)) {
+            try {
+                await api.delete(`/admin/users/${user.id}`);
+                setSuccess(`Người dùng "${user.name}" đã được xóa thành công.`);
+                // Update state to remove user from UI
+                setUsers(users.filter(u => u.id !== user.id));
+            } catch (err) {
+                setError(err.response?.data?.message || 'Xóa người dùng thất bại.');
+                console.error('Delete Error:', err);
+            }
         }
     };
 
@@ -134,15 +156,26 @@ const ManageUsers = () => {
                                             size="sm"
                                             className="me-2"
                                             onClick={() => handleViewDetails(user)}
+                                            title="Xem chi tiết"
                                         >
                                             <FaEye />
                                         </Button>
                                         <Button
                                             variant="outline-warning"
                                             size="sm"
+                                            className="me-2"
                                             onClick={() => handleChangeRole(user)}
+                                            title="Thay đổi vai trò"
                                         >
                                             <FaUserShield />
+                                        </Button>
+                                        <Button
+                                            variant="outline-danger"
+                                            size="sm"
+                                            onClick={() => handleDelete(user)}
+                                            title="Xóa người dùng"
+                                        >
+                                            <FaTrash />
                                         </Button>
                                     </td>
                                 </tr>
@@ -234,10 +267,6 @@ const ManageUsers = () => {
                                 <option value="admin">Quản trị viên</option>
                             </Form.Select>
                         </Form.Group>
-                        <Alert variant="info" className="small">
-                            <strong>Lưu ý:</strong> Endpoint này cũng cần được tạo trong backend:
-                            <code className="d-block mt-1">PUT /admin/users/:id/role</code>
-                        </Alert>
                     </Modal.Body>
                     <Modal.Footer>
                         <Button variant="secondary" onClick={() => setShowRoleModal(false)}>

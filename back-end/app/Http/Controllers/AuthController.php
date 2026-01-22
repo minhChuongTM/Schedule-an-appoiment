@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Patients;
+use App\Models\Appointments;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -36,46 +38,40 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'errors' => $validator->errors()
-            ], 422);
+            return response()->json(['success' => false, 'errors' => $validator->errors()], 422);
         }
 
         try {
-            $user = User::create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
-                'birthdate' => $request->birthdate,
-                'gender' => $request->gender,
-                'phone' => $request->phone,
-                'address' => $request->address,
-                'avatar_url' => $request->avatar_url ?? 'https://res.cloudinary.com/dokyanh220/image/upload/v1767707662/453178253_471506465671661_2781666950760530985_n_bacb7s.png',
-                'role' => 'patient',
-            ]);
+            $userAndToken = DB::transaction(function () use ($request) {
+                $user = User::create([
+                    'name' => $request->name,
+                    'email' => $request->email,
+                    'password' => Hash::make($request->password),
+                    'birthdate' => $request->birthdate,
+                    'gender' => $request->gender,
+                    'phone' => $request->phone,
+                    'address' => $request->address,
+                    'avatar_url' => $request->avatar_url ?? 'https://res.cloudinary.com/dokyanh220/image/upload/v1767707662/453178253_471506465671661_2781666950760530985_n_bacb7s.png',
+                    'role' => 'patient',
+                ]);
 
-            Patients::create([
-                'user_id' => $user->id,
-            ]);
+                Patients::create([
+                    'user_id' => $user->id,
+                ]);
 
-            // Create token for auto-login
-            $token = $user->createToken('auth_token')->plainTextToken;
+                $token = $user->createToken('auth_token')->plainTextToken;
+
+                return ['user' => $user, 'token' => $token];
+            });
 
             return response()->json([
                 'success' => true,
                 'message' => 'Đăng ký tài khoản bệnh nhân thành công',
-                'data' => [
-                    'user' => $user,
-                    'token' => $token,
-                ]
+                'data' => $userAndToken
             ], 201);
+
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Đã có lỗi xảy ra',
-                'error' => $e->getMessage()
-            ], 500);
+            return response()->json(['success' => false, 'message' => 'Đã có lỗi xảy ra', 'error' => $e->getMessage()], 500);
         }
     }
 
@@ -87,31 +83,21 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'errors' => $validator->errors()
-            ], 422);
+            return response()->json(['success' => false, 'errors' => $validator->errors()], 422);
         }
 
         $user = User::where('email', $request->email)->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Email hoặc mật khẩu không đúng'
-            ], 401);
+            return response()->json(['success' => false, 'message' => 'Email hoặc mật khẩu không đúng'], 401);
         }
 
-        // Tạo token
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
             'success' => true,
             'message' => 'Đăng nhập thành công',
-            'data' => [
-                'user' => $user,
-                'token' => $token,
-            ]
+            'data' => ['user' => $user, 'token' => $token]
         ], 200);
     }
 
@@ -119,10 +105,7 @@ class AuthController extends Controller
     {
         $request->user()->currentAccessToken()->delete();
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Đăng xuất thành công'
-        ], 200);
+        return response()->json(['success' => true, 'message' => 'Đăng xuất thành công'], 200);
     }
 
     public function me(Request $request)
@@ -130,10 +113,7 @@ class AuthController extends Controller
         $user = $request->user();
         
         if (!$user) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Không tồn tại người dùng'
-            ], 401);
+            return response()->json(['success' => false, 'message' => 'Không tồn tại người dùng'], 401);
         }
         
         if ($request->isMethod('put')) {
@@ -148,12 +128,7 @@ class AuthController extends Controller
             $user->update($data);
         }
 
-        return response()->json([
-            'success' => true,
-            'data' => [
-                'user' => $user->fresh()
-            ]
-        ]);
+        return response()->json(['success' => true, 'data' => ['user' => $user->fresh()]]);
     }
 
     public function deleteAccount(Request $request)
@@ -161,27 +136,29 @@ class AuthController extends Controller
         $user = $request->user();
 
         if (!$user) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Không tồn tại người dùng'
-            ], 401);
+            return response()->json(['success' => false, 'message' => 'Không tồn tại người dùng'], 401);
         }
 
         try {
-            $user->tokens()->delete();
+            DB::transaction(function () use ($user) {
+                // 1. Delete all tokens
+                $user->tokens()->delete();
 
-            $user->delete();
+                // 2. Delete all appointments related to the user (as a patient)
+                Appointments::where('patient_id', $user->id)->delete();
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Xóa tài khoản thành công'
-            ], 200);
+                // 3. Delete the patient record
+                Patients::where('user_id', $user->id)->delete();
+
+                // 4. Delete the user record
+                // Note: If the user is a doctor, this might require more complex logic,
+                // but for now, we assume only patients can self-delete.
+                $user->delete();
+            });
+
+            return response()->json(['success' => true, 'message' => 'Xóa tài khoản thành công'], 200);
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Đã có lỗi xảy ra',
-                'error' => $e->getMessage()
-            ], 500);
+            return response()->json(['success' => false, 'message' => 'Đã có lỗi xảy ra', 'error' => $e->getMessage()], 500);
         }
     }
 }

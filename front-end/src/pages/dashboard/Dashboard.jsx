@@ -27,7 +27,13 @@ const Dashboard = () => {
     };
 
     const handleUpdateStatus = async (id, status) => {
-        if (!window.confirm(`Bạn có chắc muốn ${status === 'active' ? 'chấp nhận' : 'hủy'} lịch hẹn này?`)) return;
+        const actionText = status === 'active'
+            ? 'chấp nhận'
+            : status === 'completed'
+                ? 'hoàn thành'
+                : 'hủy';
+
+        if (!window.confirm(`Bạn có chắc muốn ${actionText} lịch hẹn này?`)) return;
 
         try {
             const response = await api.put(`/appointments/${id}`, { status });
@@ -84,6 +90,12 @@ const Dashboard = () => {
         return roleConfig[role] || { variant: 'secondary', label: role };
     };
 
+    const normalizeStatus = (status) => {
+        if (status === 'pending') return 'un-active';
+        if (status === 'confirmed') return 'active';
+        return status;
+    };
+
     const getStatusBadge = (status) => {
         const statusMap = {
             'pending': { bg: 'warning', text: 'Chờ xác nhận' },
@@ -92,7 +104,8 @@ const Dashboard = () => {
             'cancelled': { bg: 'danger', text: 'Đã hủy' }
         };
         // Normalize status
-        const activeStatus = status === 'active' ? 'confirmed' : (status === 'un-active' ? 'pending' : status);
+        const normalized = normalizeStatus(status);
+        const activeStatus = normalized === 'active' ? 'confirmed' : (normalized === 'un-active' ? 'pending' : normalized);
         const config = statusMap[activeStatus] || { bg: 'secondary', text: status };
         return <Badge bg={config.bg}>{config.text}</Badge>;
     };
@@ -217,7 +230,7 @@ const Dashboard = () => {
                                                     <td>{getStatusBadge(app.status)}</td>
                                                     {user.role === 'doctor' && (
                                                         <td>
-                                                            {app.status === 'un-active' && (
+                                                            {normalizeStatus(app.status) === 'un-active' && (
                                                                 <div className="d-flex gap-2">
                                                                     <Button
                                                                         variant="success"
@@ -235,7 +248,7 @@ const Dashboard = () => {
                                                                     </Button>
                                                                 </div>
                                                             )}
-                                                            {app.status === 'active' && (
+                                                            {normalizeStatus(app.status) === 'active' && (
                                                                 <Button
                                                                     variant="outline-success"
                                                                     size="sm"

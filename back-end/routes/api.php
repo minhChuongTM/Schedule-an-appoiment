@@ -31,6 +31,7 @@ Route::get('/doctors', [DoctorsController::class, 'getDoctors']);
 Route::get('/doctors/{id}', [DoctorsController::class, 'detailDoctor']);
 Route::get('/departments', [DepartmentsController::class, 'getDepartments']);
 Route::get('/departments/{departmentId}/doctors', [AppointmentsController::class, 'getDoctorsByDepartment']);
+Route::get('/appointments/availability', [AppointmentsController::class, 'getDoctorAvailability']);
 Route::get('/medical', [MedicalNewsController::class, 'index']);
 Route::get('/medical-news', [MedicalNewsController::class, 'index']);
 Route::get('/medical/{id}', [MedicalNewsController::class, 'show']);

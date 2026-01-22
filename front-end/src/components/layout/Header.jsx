@@ -9,6 +9,7 @@ import logoChuong from "~/assets/img/logoChuong.png";
 const Header = () => {
   const [showDropdownAbout, setShowDropdownAbout] = useState(false);
   const [showDropdownMedia, setShowDropdownMedia] = useState(false);
+  const [showDropdownServices, setShowDropdownServices] = useState(false);
   const [categoryMedical, setCategoryMedical] = useState([]);
   const { user, logout, refreshUser } = useAuth();
   const [notifications, setNotifications] = useState([]);
@@ -119,11 +120,15 @@ const Header = () => {
               </Nav.Link>
               {/* dropdown giới thiệu */}
               <div
-                className="nav-item dropdown mx-2"
+                className={`nav-item dropdown mx-2 ${showDropdownAbout ? "show" : ""}`}
                 onMouseEnter={() => setShowDropdownAbout(true)}
                 onMouseLeave={() => setShowDropdownAbout(false)}
               >
-                <Nav.Link as={NavLink} to="/gioi-thieu" className="mx-2 fw-medium">
+                <Nav.Link
+                  as={NavLink}
+                  to="/gioi-thieu"
+                  className={`mx-2 fw-medium nav-link ${showDropdownAbout ? "show" : ""}`}
+                >
                   Giới thiệu
                 </Nav.Link>
                 <ul className={`dropdown-menu shadow-sm ${showDropdownAbout ? "show" : ""}`}>
@@ -147,9 +152,44 @@ const Header = () => {
               <Nav.Link as={NavLink} to="/dieu-tri" className="mx-2 fw-medium">
                 Điều trị
               </Nav.Link>
-              <Nav.Link as={NavLink} to="/dich-vu" className="mx-2 fw-medium">
-                Dịch vụ
-              </Nav.Link>
+
+              {/* dropdown dịch vụ */}
+              <div
+                className={`nav-item dropdown mx-2 ${showDropdownServices ? "show" : ""}`}
+                onMouseEnter={() => setShowDropdownServices(true)}
+                onMouseLeave={() => setShowDropdownServices(false)}
+              >
+                <NavLink to="/dich-vu" className={`nav-link fw-medium ${showDropdownServices ? "show" : ""}`}>
+                  Dịch vụ
+                </NavLink>
+                <ul className={`dropdown-menu shadow-sm ${showDropdownServices ? "show" : ""}`}>
+                  <li>
+                    <NavLink to="/dich-vu/phau-thuat" className="dropdown-item">
+                      Thông tin phẫu thuật
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/dich-vu/xuat-vien-som" className="dropdown-item">
+                      Hỗ trợ xuất viện sớm
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/dich-vu/chuyen-phat" className="dropdown-item">
+                      Chuyển phát nhanh
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/dich-vu/xe-van-chuyen" className="dropdown-item">
+                      Xe vận chuyển
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/dich-vu/tu-van-thuoc" className="dropdown-item">
+                      Tư vấn thuốc
+                    </NavLink>
+                  </li>
+                </ul>
+              </div>
 
               <Nav.Link as={NavLink} to="/tim-bac-si" className="mx-2 fw-medium">
                 Tìm bác sĩ
@@ -163,11 +203,15 @@ const Header = () => {
 
               {/* Dropdown Truyền thông */}
               <div
-                className="nav-item dropdown mx-2"
+                className={`nav-item dropdown mx-2 ${showDropdownMedia ? "show" : ""}`}
                 onMouseEnter={() => setShowDropdownMedia(true)}
                 onMouseLeave={() => setShowDropdownMedia(false)}
               >
-                <NavLink to="/truyen-thong" className="nav-link fw-medium" role="button">
+                <NavLink
+                  to="/truyen-thong"
+                  className={`nav-link fw-medium ${showDropdownMedia ? "show" : ""}`}
+                  role="button"
+                >
                   Truyền thông
                 </NavLink>
                 <ul className={`dropdown-menu shadow-sm ${showDropdownMedia ? "show" : ""}`}>

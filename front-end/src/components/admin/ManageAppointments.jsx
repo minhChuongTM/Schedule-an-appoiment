@@ -42,6 +42,9 @@ const ManageAppointments = () => {
     };
 
     const handleAccept = async (id) => {
+        if (!window.confirm('Bạn có chắc muốn chấp nhận lịch hẹn này?')) return;
+        setError('');
+        setSuccess('');
         try {
             await api.put(`/appointments/${id}`, { status: 'active' }); // Active = Confirmed
             setSuccess('Đã chấp nhận lịch hẹn!');
@@ -51,10 +54,16 @@ const ManageAppointments = () => {
         }
     };
 
+    const normalizeStatus = (status) => {
+        if (status === 'pending') return 'un-active';
+        if (status === 'confirmed') return 'active';
+        return status;
+    };
+
     const getFilteredAppointments = () => {
         return appointments.filter(app => {
             const matchDate = filterDate ? app.appointment_date.startsWith(filterDate) : true;
-            const matchStatus = filterStatus ? app.status === filterStatus : true;
+            const matchStatus = filterStatus ? normalizeStatus(app.status) === filterStatus : true;
             return matchDate && matchStatus;
         });
     };
@@ -114,7 +123,8 @@ const ManageAppointments = () => {
             completed: { bg: 'success', text: 'Hoàn thành' },
             cancelled: { bg: 'danger', text: 'Đã hủy' }
         };
-        const statusInfo = statusMap[status] || { bg: 'secondary', text: status };
+        const normalized = normalizeStatus(status);
+        const statusInfo = statusMap[normalized] || { bg: 'secondary', text: status };
         return <Badge bg={statusInfo.bg}>{statusInfo.text}</Badge>;
     };
 
@@ -188,7 +198,7 @@ const ManageAppointments = () => {
                                         {/* Show Accept button if status doesn't seem to be confirmed/cancelled yet. 
                                         Note: 'un-active' is used for pending in this system based on DB context 
                                     */}
-                                        {(appointment.status === 'un-active' || appointment.status === 'pending') && (
+                                        {normalizeStatus(appointment.status) === 'un-active' && (
                                             <Button
                                                 variant="success"
                                                 size="sm"
@@ -318,7 +328,7 @@ const ManageAppointments = () => {
                                 </tr>
                                 <tr>
                                     <th>Bác sĩ:</th>
-                                    <td>{viewAppointment.doctor?.name || 'Chưa chọn'}</td>
+                                    <td>{viewAppointment.doctor?.user?.name || 'Chưa chọn'}</td>
                                 </tr>
                                 <tr>
                                     <th>Khoa:</th>
@@ -326,11 +336,11 @@ const ManageAppointments = () => {
                                 </tr>
                                 <tr>
                                     <th>Ngày hẹn:</th>
-                                    <td>{viewAppointment.appointment_date}</td>
+                                    <td>{viewAppointment.appointment_date ? new Date(viewAppointment.appointment_date).toLocaleDateString('vi-VN') : ''}</td>
                                 </tr>
                                 <tr>
                                     <th>Giờ hẹn:</th>
-                                    <td>{viewAppointment.appointment_time}</td>
+                                    <td>{viewAppointment.appointment_date ? new Date(viewAppointment.appointment_date).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) : ''}</td>
                                 </tr>
                                 <tr>
                                     <th>Lý do khám:</th>

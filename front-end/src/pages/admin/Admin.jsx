@@ -7,7 +7,6 @@ import ManageUsers from '../../components/admin/ManageUsers';
 import ManageDoctors from '../../components/admin/ManageDoctors';
 import ManageDepartments from '../../components/admin/ManageDepartments';
 import ManageMedicalNews from '../../components/admin/ManageMedicalNews';
-import Notifications from '~/components/common/Notifications';
 import api from '~/services/api';
 
 const Admin = () => {

@@ -401,8 +401,8 @@ const ManageDoctors = () => {
                         <div>
                             <div className="text-center mb-4">
                                 <img
-                                    src={viewDoctor.avatar || 'https://via.placeholder.com/150'}
-                                    alt={viewDoctor.name}
+                                    src={viewDoctor.user?.avatar_url || 'https://via.placeholder.com/150'}
+                                    alt={viewDoctor.user?.name}
                                     className="rounded-circle"
                                     style={{ width: '150px', height: '150px', objectFit: 'cover' }}
                                 />
@@ -411,29 +411,29 @@ const ManageDoctors = () => {
                                 <tbody>
                                     <tr>
                                         <th>Họ tên:</th>
-                                        <td>{viewDoctor.name}</td>
+                                        <td>{viewDoctor.user?.name}</td>
                                     </tr>
                                     <tr>
                                         <th>Email:</th>
-                                        <td>{viewDoctor.email}</td>
+                                        <td>{viewDoctor.user?.email}</td>
                                     </tr>
                                     <tr>
                                         <th>Số điện thoại:</th>
-                                        <td>{viewDoctor.phone}</td>
+                                        <td>{viewDoctor.user?.phone}</td>
                                     </tr>
                                     <tr>
                                         <th>Ngày sinh:</th>
-                                        <td>{viewDoctor.birthdate}</td>
+                                        <td>{viewDoctor.user?.birthdate}</td>
                                     </tr>
                                     <tr>
                                         <th>Giới tính:</th>
                                         <td>
-                                            {viewDoctor.gender === 'male' ? 'Nam' : viewDoctor.gender === 'female' ? 'Nữ' : 'Khác'}
+                                            {viewDoctor.user?.gender === 'male' ? 'Nam' : viewDoctor.user?.gender === 'female' ? 'Nữ' : 'Khác'}
                                         </td>
                                     </tr>
                                     <tr>
                                         <th>Địa chỉ:</th>
-                                        <td>{viewDoctor.address}</td>
+                                        <td>{viewDoctor.user?.address}</td>
                                     </tr>
                                     <tr>
                                         <th>Chức vụ:</th>

@@ -12,9 +12,11 @@ const BookAppointment = () => {
     const [doctors, setDoctors] = useState([]);
     const [loading, setLoading] = useState(false);
     const [loadingDoctors, setLoadingDoctors] = useState(false);
+    const [loadingAvailability, setLoadingAvailability] = useState(false);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
     const [userInfo, setUserInfo] = useState(null);
+    const [busyTimes, setBusyTimes] = useState([]);
 
     const [formData, setFormData] = useState({
         department_id: searchParams.get('department_id') || '',
@@ -41,6 +43,23 @@ const BookAppointment = () => {
             fetchDoctorsByDepartment(formData.department_id);
         }
     }, [formData.department_id]);
+
+    useEffect(() => {
+        if (formData.doctor_id && formData.appointment_date) {
+            fetchDoctorAvailability(formData.doctor_id, formData.appointment_date);
+        } else {
+            setBusyTimes([]);
+        }
+    }, [formData.doctor_id, formData.appointment_date]);
+
+    useEffect(() => {
+        if (busyTimes.includes(formData.appointment_time)) {
+            setFormData(prev => ({
+                ...prev,
+                appointment_time: ''
+            }));
+        }
+    }, [busyTimes]);
 
     const fetchDepartments = async () => {
         try {
@@ -93,31 +112,49 @@ const BookAppointment = () => {
         }
     };
 
+    const fetchDoctorAvailability = async (doctorId, date) => {
+        try {
+            setLoadingAvailability(true);
+            const response = await api.get('/appointments/availability', {
+                params: { doctor_id: doctorId, date }
+            });
+            if (response.data.success) {
+                setBusyTimes(response.data.data?.busy_times || []);
+            }
+        } catch (error) {
+            console.error('Error fetching availability:', error);
+            setBusyTimes([]);
+        } finally {
+            setLoadingAvailability(false);
+        }
+    };
+
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
+        setFormData(prev => {
+            const next = { ...prev, [name]: value };
 
-        // Khi chọn doctor, tự động set department
-        if (name === 'doctor_id' && value) {
-            const selectedDoctor = doctors.find(d => d.user_id.toString() === value);
-            if (selectedDoctor) {
-                setFormData(prev => ({
-                    ...prev,
-                    department_id: selectedDoctor.department_id.toString()
-                }));
+            if (name === 'appointment_date') {
+                next.appointment_time = '';
             }
-        }
 
-        // Khi thay đổi department, reset doctor
-        if (name === 'department_id') {
-            setFormData(prev => ({
-                ...prev,
-                doctor_id: ''
-            }));
-        }
+            // Khi chọn doctor, tự động set department
+            if (name === 'doctor_id') {
+                const selectedDoctor = doctors.find(d => d.user_id.toString() === value);
+                if (selectedDoctor) {
+                    next.department_id = selectedDoctor.department_id.toString();
+                }
+                next.appointment_time = '';
+            }
+
+            // Khi thay đổi department, reset doctor
+            if (name === 'department_id') {
+                next.doctor_id = '';
+                next.appointment_time = '';
+            }
+
+            return next;
+        });
     };
 
     const handleSubmit = async (e) => {
@@ -177,6 +214,28 @@ const BookAppointment = () => {
         future.setMonth(future.getMonth() + 6);
         return future.toISOString().split('T')[0];
     };
+
+    const morningSlots = [
+        { value: '08:00', label: '08:00 - 8 giờ sáng' },
+        { value: '08:30', label: '08:30 - 8 giờ 30 sáng' },
+        { value: '09:00', label: '09:00 - 9 giờ sáng' },
+        { value: '09:30', label: '09:30 - 9 giờ 30 sáng' },
+        { value: '10:00', label: '10:00 - 10 giờ sáng' },
+        { value: '10:30', label: '10:30 - 10 giờ 30 sáng' },
+        { value: '11:00', label: '11:00 - 11 giờ sáng' },
+        { value: '11:30', label: '11:30 - 11 giờ 30 sáng' }
+    ];
+
+    const afternoonSlots = [
+        { value: '13:00', label: '13:00 - 1 giờ chiều' },
+        { value: '13:30', label: '13:30 - 1 giờ 30 chiều' },
+        { value: '14:00', label: '14:00 - 2 giờ chiều' },
+        { value: '14:30', label: '14:30 - 2 giờ 30 chiều' },
+        { value: '15:00', label: '15:00 - 3 giờ chiều' },
+        { value: '15:30', label: '15:30 - 3 giờ 30 chiều' },
+        { value: '16:00', label: '16:00 - 4 giờ chiều' },
+        { value: '16:30', label: '16:30 - 4 giờ 30 chiều' }
+    ];
 
     return (
         <Container className="py-5">
@@ -311,28 +370,36 @@ const BookAppointment = () => {
                                             >
                                                 <option value="">-- Chọn giờ --</option>
                                                 <optgroup label="Buổi sáng">
-                                                    <option value="08:00">08:00 - 8 giờ sáng</option>
-                                                    <option value="08:30">08:30 - 8 giờ 30 sáng</option>
-                                                    <option value="09:00">09:00 - 9 giờ sáng</option>
-                                                    <option value="09:30">09:30 - 9 giờ 30 sáng</option>
-                                                    <option value="10:00">10:00 - 10 giờ sáng</option>
-                                                    <option value="10:30">10:30 - 10 giờ 30 sáng</option>
-                                                    <option value="11:00">11:00 - 11 giờ sáng</option>
-                                                    <option value="11:30">11:30 - 11 giờ 30 sáng</option>
+                                                    {morningSlots.map(slot => (
+                                                        <option
+                                                            key={slot.value}
+                                                            value={slot.value}
+                                                            disabled={busyTimes.includes(slot.value)}
+                                                        >
+                                                            {slot.label}{busyTimes.includes(slot.value) ? ' (Đã có lịch)' : ''}
+                                                        </option>
+                                                    ))}
                                                 </optgroup>
                                                 <optgroup label="Buổi chiều">
-                                                    <option value="13:00">13:00 - 1 giờ chiều</option>
-                                                    <option value="13:30">13:30 - 1 giờ 30 chiều</option>
-                                                    <option value="14:00">14:00 - 2 giờ chiều</option>
-                                                    <option value="14:30">14:30 - 2 giờ 30 chiều</option>
-                                                    <option value="15:00">15:00 - 3 giờ chiều</option>
-                                                    <option value="15:30">15:30 - 3 giờ 30 chiều</option>
-                                                    <option value="16:00">16:00 - 4 giờ chiều</option>
-                                                    <option value="16:30">16:30 - 4 giờ 30 chiều</option>
+                                                    {afternoonSlots.map(slot => (
+                                                        <option
+                                                            key={slot.value}
+                                                            value={slot.value}
+                                                            disabled={busyTimes.includes(slot.value)}
+                                                        >
+                                                            {slot.label}{busyTimes.includes(slot.value) ? ' (Đã có lịch)' : ''}
+                                                        </option>
+                                                    ))}
                                                 </optgroup>
                                             </Form.Select>
                                             <Form.Text className="text-muted">
-                                                Chọn giờ khám phù hợp
+                                                {loadingAvailability && 'Đang kiểm tra lịch của bác sĩ...'}
+                                                {!loadingAvailability && formData.doctor_id && formData.appointment_date && busyTimes.length > 0 && (
+                                                    <>Đã có lịch vào: {busyTimes.join(', ')}</>
+                                                )}
+                                                {!loadingAvailability && (!formData.doctor_id || !formData.appointment_date || busyTimes.length === 0) && (
+                                                    <>Chọn giờ khám phù hợp</>
+                                                )}
                                             </Form.Text>
                                         </Form.Group>
                                     </Col>
