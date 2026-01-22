@@ -1,0 +1,640 @@
+/* Custom CSS cho phần Chuyên Khoa */
+
+.chuyenkhoaHome {
+  padding: 60px 0;
+  background-color: #f8f9fa;
+}
+
+.titleHome {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.titleHome h2 {
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--brandColor);
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  position: relative;
+  display: inline-block;
+  padding-bottom: 15px;
+}
+
+.titleHome h2::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 3px;
+  background: linear-gradient(to right, var(--brandColor), var(--info));
+}
+
+.chuyenkhoaHome > div:nth-child(2) {
+  text-align: center;
+  margin-bottom: 40px;
+  padding: 0 15px;
+}
+
+.chuyenkhoaHome > div:nth-child(2) span {
+  font-size: 16px;
+  line-height: 1.8;
+  color: #555;
+  max-width: 900px;
+  display: inline-block;
+}
+
+.chuyenkhoa {
+  margin-bottom: 30px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  height: 100%;
+}
+
+.chuyenkhoa:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 8px 20px var(--boxShadowColor);
+}
+
+.chuyenkhoa .img {
+  position: relative;
+  overflow: hidden;
+  height: 250px;
+}
+
+.chuyenkhoa .img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.chuyenkhoa:hover .img img {
+  transform: scale(1.1);
+}
+
+.chuyenkhoa .img::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to bottom, transparent 0%, var(--boxShadowColor) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.chuyenkhoa:hover .img::after {
+  opacity: 1;
+}
+
+.chuyenkhoa h3 {
+  padding: 20px 15px;
+  margin: 0;
+  text-align: center;
+  background: #fff;
+}
+
+.chuyenkhoa h3 a {
+  color: #333;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-size: 18px;
+  font-weight: 600;
+  transition: color 0.3s ease;
+  display: block;
+}
+
+.chuyenkhoa:hover h3 a {
+  color: var(--brandColor);
+}
+
+/* SERVICE -- NEWS HOME */
+/* Service Section Styling */
+.serviceHome, .newsHome {
+  padding: 60px 0;
+  background-image: url("../img/bg1.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.serviceHome .wrapper,
+.newsHome .wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+.serviceHome .titleHome,
+.newsHome .titleHome {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.serviceHome .titleHome h2,
+.newsHome .titleHome h2 {
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--brandColor);
+  position: relative;
+  display: inline-block;
+  padding-bottom: 15px;
+}
+
+/* Carousel Item Styling */
+.serviceHome .react-multi-carousel-item,
+.newsHome .react-multi-carousel-item {
+  padding: 20px 10px;
+  display: flex;
+  justify-content: center;
+}
+
+/* .serviceHome .react-multi-carousel-item > div {
+  width: 100%;
+  max-width: 250px;
+} */
+
+.serviceHome .react-multi-carousel-item a,
+.newsHome .react-multi-carousel-item a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  padding: 30px 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px var(--boxShadowColor);
+  transition: all 0.3s ease;
+  height: 100%;
+  width: 350px;
+}
+
+.serviceHome .react-multi-carousel-item a:hover,
+.newsHome .react-multi-carousel-item a:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 8px 25px var(--boxShadowColor);
+}
+
+.serviceHome .react-multi-carousel-item img {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  margin-bottom: 20px;
+  transition: transform 0.3s ease;
+}
+
+.newsHome .react-multi-carousel-item img {
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+  border-radius: 8px;
+  transition: transform 0.3s ease;
+}
+
+.serviceHome .react-multi-carousel-item a:hover img {
+  transform: scale(1.1);
+}
+
+.newsHome .react-multi-carousel-item a:hover img {
+  transform: scale(1.05);
+}
+
+.serviceHome .titleService,
+.newsHome .titleService {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+  margin: 0;
+  line-height: 1.4;
+  min-height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.serviceHome .react-multi-carousel-item a:hover .titleService,
+.newsHome .react-multi-carousel-item a:hover .titleService {
+  color: var(--brandColor);
+}
+
+/* Arrows Styling */
+.serviceHome .react-multiple-carousel__arrow,
+.newsHome .react-multiple-carousel__arrow {
+  background-color: var(--brandColor);
+  min-width: 45px;
+  min-height: 45px;
+  border-radius: 50%;
+  opacity: 0.9;
+  transition: all 0.3s ease;
+}
+
+.serviceHome .react-multiple-carousel__arrow:hover,
+.newsHome .react-multiple-carousel__arrow:hover {
+  background-color: var(--info);
+  opacity: 1;
+}
+
+.serviceHome .react-multiple-carousel__arrow::before,
+.newsHome .react-multiple-carousel__arrow::before {
+  font-size: 20px;
+  color: white;
+  font-weight: bold;
+}
+
+.serviceHome .react-multiple-carousel__arrow--left,
+.newsHome .react-multiple-carousel__arrow--left {
+  left: 10px;
+}
+
+.serviceHome .react-multiple-carousel__arrow--right,
+.newsHome .react-multiple-carousel__arrow--right {
+  right: 10px;
+}
+
+/* Dots Styling */
+.serviceHome .react-multi-carousel-dot-list,
+.newsHome .react-multi-carousel-dot-list {
+  margin-top: 30px;
+}
+
+.serviceHome .react-multi-carousel-dot button,
+.newsHome .react-multi-carousel-dot button {
+  width: 10px;
+  height: 10px;
+  border: none;
+  background-color: #ddd;
+  border-radius: 50%;
+  margin: 0 5px;
+  transition: all 0.3s ease;
+}
+
+/* Dashboard Home Section */
+.dashboard-home {
+  padding: 80px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.dashboard-home::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0.5;
+  z-index: 0;
+}
+
+.dashboard-home .container-fluid {
+  position: relative;
+  z-index: 1;
+  max-width: 1400px;
+}
+
+/* Title Section */
+.dashboard-home .titleHome h2 {
+  font-size: 42px;
+  font-weight: 700;
+  color: var(--brandColor);
+  position: relative;
+  display: inline-block;
+  padding-bottom: 20px;
+}
+
+.dashboard-home .titleHome h2::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, var(--brandColor), var(--info));
+  border-radius: 2px;
+}
+
+/* Text Description */
+.dashboard-home .text p {
+  font-size: 18px;
+  line-height: 1.8;
+  color: var(--textColor);
+  font-weight: 400;
+}
+
+/* Item Cards */
+.dashboard-home .item {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transition: all 0.4s ease;
+  border: 2px solid transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.dashboard-home .item::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.dashboard-home .item:hover::before {
+  left: 100%;
+}
+
+.dashboard-home .item:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 40px var(--boxShadowColor);
+  border-color: var(--brandColor);
+}
+
+/* Image Container */
+.dashboard-home .item .img {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 5px 15px var(--boxShadowColor);
+  transition: all 0.3s ease;
+}
+
+.dashboard-home .item:hover .img {
+  box-shadow: 0 8px 25px var(--info);
+}
+
+.dashboard-home .item .img img {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+}
+
+/* Number Display */
+.dashboard-home .item .num p {
+  font-size: 48px;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--brandColor) 0%, var(--info) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0;
+  line-height: 1;
+  transition: all 0.3s ease;
+}
+
+.dashboard-home .item:hover .num p {
+  transform: scale(1.1);
+}
+
+/* Text Description */
+.dashboard-home .item .text p {
+  font-size: 16px;
+  color: var(--textColor);
+  font-weight: 500;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Counter Animation */
+@keyframes countUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dashboard-home .item .num {
+  animation: countUp 0.8s ease-out;
+}
+
+/* Hover Effect for Mobile */
+@media (hover: none) {
+  .dashboard-home .item:active {
+    transform: scale(0.98);
+  }
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .serviceHome .titleHome h2,
+  .newsHome .titleHome h2 {
+    font-size: 30px;
+  }
+
+  .serviceHome .react-multi-carousel-item img {
+    width: 70px;
+    height: 70px;
+  }
+  .newsHome .react-multi-carousel-item img {
+    height: 240px;
+  }
+  .serviceHome .titleService,
+  .newsHome .titleService {
+    font-size: 16px;
+    min-height: 45px;
+  }
+
+  .dashboard-home {
+    padding: 60px 0;
+  }
+
+  .dashboard-home .titleHome h2 {
+    font-size: 36px;
+  }
+
+  .dashboard-home .text p {
+    font-size: 16px;
+  }
+
+  .dashboard-home .item .num p {
+    font-size: 40px;
+  }
+
+  .dashboard-home .item .img {
+    width: 70px;
+    height: 70px;
+  }
+
+  .dashboard-home .item .img img {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Responsive adjustments */
+  .chuyenkhoaHome {
+    padding: 40px 0;
+  }
+
+  .titleHome h2 {
+    font-size: 28px;
+  }
+
+  .chuyenkhoaHome > div:nth-child(2) span {
+    font-size: 14px;
+  }
+
+  .chuyenkhoa .img {
+    height: 200px;
+  }
+
+  .chuyenkhoa h3 a {
+    font-size: 16px;
+  }
+  /* ServiceHome - newsHome */
+  .serviceHome,
+  .newsHome {
+    padding: 40px 0;
+  }
+
+  .serviceHome .titleHome,
+  .newsHome .titleHome {
+    margin-bottom: 30px;
+  }
+
+  .serviceHome .titleHome h2,
+  .newsHome .titleHome h2 {
+    font-size: 26px;
+  }
+
+  .serviceHome .react-multi-carousel-item a,
+  .newsHome .react-multi-carousel-item a {
+    padding: 25px 15px;
+  }
+
+  .serviceHome .react-multi-carousel-item img {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 15px;
+  }
+  .newsHome .react-multi-carousel-item img {
+    height: 200px;
+  }
+
+  .serviceHome .titleService,
+  .newsHome .titleService {
+    font-size: 15px;
+    min-height: 40px;
+  }
+
+  .serviceHome .react-multiple-carousel__arrow,
+  .newsHome .react-multiple-carousel__arrow {
+    min-width: 40px;
+    min-height: 40px;
+  }
+
+  .dashboard-home {
+    padding: 50px 0;
+  }
+
+  .dashboard-home .titleHome h2 {
+    font-size: 30px;
+  }
+
+  .dashboard-home .text p {
+    font-size: 15px;
+    padding: 0 15px;
+  }
+
+  .dashboard-home .item {
+    margin-bottom: 20px;
+  }
+
+  .dashboard-home .item .num p {
+    font-size: 36px;
+  }
+
+  .dashboard-home .item .text p {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 576px) {
+  /* Responsive adjustments */
+
+  .titleHome h2 {
+    font-size: 24px;
+  }
+
+  .chuyenkhoa .img {
+    height: 180px;
+  }
+
+  /* serviceHome - newsHome */
+  .newsHome .react-multi-carousel-item img {
+    height: 180px;
+  }
+  .serviceHome,
+  .newsHome {
+    padding: 30px 0;
+  }
+
+  .serviceHome .titleHome h2,
+  .newsHome .titleHome h2 {
+    font-size: 24px;
+  }
+
+  .serviceHome .react-multi-carousel-item a,
+  .newsHome .react-multi-carousel-item a {
+    padding: 20px 10px;
+    width: auto;
+  }
+
+  .serviceHome .titleService,
+  .newsHome .titleService {
+    font-size: 14px;
+  }
+
+  .serviceHome .react-multiple-carousel__arrow,
+  .newsHome .react-multiple-carousel__arrow {
+    display: none;
+  }
+  .dashboard-home {
+    padding: 40px 0;
+  }
+
+  .dashboard-home .titleHome h2 {
+    font-size: 26px;
+  }
+
+  .dashboard-home .item .num p {
+    font-size: 32px;
+  }
+
+  .dashboard-home .item .img {
+    width: 60px;
+    height: 60px;
+  }
+
+  .dashboard-home .item .img img {
+    width: 35px;
+    height: 35px;
+  }
+}
+.sticky-top{
+  height: 100vh;
+}
+.bg-light{
+  /* background-color: #f8f9fa !important; */
+  background-color: #fff !important;
+}

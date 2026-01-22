@@ -1,0 +1,33 @@
+.service-card {
+  border: none;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.service-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 24px var(--brandColor);
+}
+
+.service-img {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  margin: 25px auto 10px;
+}
+
+.card-title a {
+  text-decoration: none !important;
+  color: var(--textLight);
+}
+
+.card-title a:hover {
+  text-decoration: underline;
+  color: var(--brandColor);
+
+}
+
+.card-text {
+  font-size: 14px;
+  color: #555;
+}

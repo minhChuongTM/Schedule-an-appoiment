@@ -1,0 +1,291 @@
+/* Fixed Menu Wrapper */
+.fixed-menu-wrapper {
+  position: fixed;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 999;
+}
+
+/* Menu Fixed */
+.menuFixed {
+  position: relative;
+}
+
+.menuFixed .menu-item {
+  position: relative;
+}
+
+/* Menu Link */
+.menuFixed .menu-link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  transition: all 0.3s ease;
+}
+
+/* Text Tooltip */
+.menuFixed .divText {
+  right: 70px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(10px);
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  font-size: 14px;
+  font-weight: 500;
+  z-index: 1;
+}
+
+/* Arrow cho từng màu */
+.menuFixed .menu-item:nth-child(1) .divText::after {
+  content: "";
+  position: absolute;
+  right: -8px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-left: 8px solid #28a745;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+}
+
+.menuFixed .menu-item:nth-child(2) .divText::after {
+  content: "";
+  position: absolute;
+  right: -8px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-left: 8px solid #17a2b8;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+}
+
+.menuFixed .menu-item:nth-child(3) .divText::after {
+  content: "";
+  position: absolute;
+  right: -8px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-left: 8px solid #ffc107;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+}
+
+.menuFixed .menu-item:hover .divText {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(0);
+}
+
+/* Icon Container */
+.menuFixed .divIcon {
+  width: 55px;
+  height: 55px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid #f0f0f0;
+}
+
+/* Icon Styling - Mỗi icon màu riêng */
+.menuFixed .icon-doctor {
+  font-size: 24px;
+  color: #28a745;
+  transition: all 0.3s ease;
+}
+
+.menuFixed .icon-calendar {
+  font-size: 24px;
+  color: #17a2b8;
+  transition: all 0.3s ease;
+}
+
+.menuFixed .icon-arrow {
+  font-size: 24px;
+  color: #ffc107;
+  transition: all 0.3s ease;
+}
+
+/* Hover Effects - Icon 1 (Doctor) */
+.menuFixed .menu-item:nth-child(1):hover .divIcon {
+  transform: scale(1.1);
+  box-shadow: 0 6px 25px rgba(40, 167, 69, 0.5) !important;
+  background-color: #28a745 !important;
+  border-color: #28a745;
+}
+
+.menuFixed .menu-item:nth-child(1):hover .icon-doctor {
+  color: white;
+  transform: scale(1.1);
+}
+
+/* Hover Effects - Icon 2 (Calendar) */
+.menuFixed .menu-item:nth-child(2):hover .divIcon {
+  transform: scale(1.1);
+  box-shadow: 0 6px 25px rgba(23, 162, 184, 0.5) !important;
+  background-color: #17a2b8 !important;
+  border-color: #17a2b8;
+}
+
+.menuFixed .menu-item:nth-child(2):hover .icon-calendar {
+  color: white;
+  transform: scale(1.1);
+}
+
+/* Hover Effects - Icon 3 (Arrow) */
+.menuFixed .menu-item:nth-child(3):hover .divIcon {
+  transform: scale(1.1);
+  box-shadow: 0 6px 25px rgba(255, 193, 7, 0.5) !important;
+  background-color: #ffc107 !important;
+  border-color: #ffc107;
+}
+
+.menuFixed .menu-item:nth-child(3):hover .icon-arrow {
+  color: white;
+  transform: scale(1.1);
+}
+
+/* Pulse Animation - Mỗi icon màu riêng */
+@keyframes pulseGreen {
+  0% {
+    box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 15px rgba(40, 167, 69, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(40, 167, 69, 0);
+  }
+}
+
+@keyframes pulseBlue {
+  0% {
+    box-shadow: 0 0 0 0 rgba(23, 162, 184, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 15px rgba(23, 162, 184, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(23, 162, 184, 0);
+  }
+}
+
+@keyframes pulseYellow {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 15px rgba(255, 193, 7, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 193, 7, 0);
+  }
+}
+
+.menuFixed .menu-item:nth-child(1) .divIcon {
+  animation: pulseGreen 2s infinite;
+}
+
+.menuFixed .menu-item:nth-child(2) .divIcon {
+  animation: pulseBlue 2s infinite;
+}
+
+.menuFixed .menu-item:nth-child(3) .divIcon {
+  animation: pulseYellow 2s infinite;
+}
+
+.menuFixed .menu-item:hover .divIcon {
+  animation: none;
+}
+
+/* Smooth Scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Show/Hide on Scroll */
+.menuFixed {
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.menuFixed.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Responsive - Tablet */
+@media (max-width: 992px) {
+  .fixed-menu-wrapper {
+    right: 15px;
+  }
+
+  .menuFixed .divIcon {
+    width: 50px;
+    height: 50px;
+  }
+
+  .menuFixed .icon-doctor,
+  .menuFixed .icon-calendar,
+  .menuFixed .icon-arrow {
+    font-size: 22px;
+  }
+
+  .menuFixed .divText {
+    right: 65px;
+    font-size: 13px;
+    padding: 8px 16px !important;
+  }
+}
+
+/* Responsive - Mobile */
+@media (max-width: 768px) {
+  .fixed-menu-wrapper {
+    right: 10px;
+    top: auto;
+    bottom: 20px;
+    transform: none;
+  }
+
+  .menuFixed .menu-item {
+    margin-bottom: 10px !important;
+  }
+
+  .menuFixed .menu-item:last-child {
+    margin-bottom: 0 !important;
+  }
+
+  .menuFixed .divIcon {
+    width: 48px;
+    height: 48px;
+  }
+
+  .menuFixed .icon-doctor,
+  .menuFixed .icon-calendar,
+  .menuFixed .icon-arrow {
+    font-size: 20px;
+  }
+
+  .menuFixed .divText {
+    display: none;
+  }
+}
+
+@media (max-width: 576px) {
+  .fixed-menu-wrapper {
+    right: 8px;
+    bottom: 15px;
+  }
+
+  .menuFixed .divIcon {
+    width: 45px;
+    height: 45px;
+  }
+
+  .menuFixed .icon-doctor,
+  .menuFixed .icon-calendar,
+  .menuFixed .icon-arrow {
+    font-size: 18px;
+  }
+}

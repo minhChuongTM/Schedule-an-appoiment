@@ -1,0 +1,132 @@
+.blog-detail {
+  transition: all 0.3s ease;
+}
+
+.blog-detail h1 {
+  line-height: 1.3;
+  position: relative;
+  padding-bottom: 15px;
+}
+
+.blog-detail h1::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, var(--info), var(--brandColor));
+  border-radius: 2px;
+}
+
+/* Meta information */
+.blog-detail .d-flex.align-items-center {
+  font-size: 0.95rem;
+}
+
+.blog-detail .d-flex.align-items-center i {
+  color: var(--brandColor);
+  font-size: 1.1rem;
+}
+
+/* Image container */
+.blog-detail .bg-light {
+  border: 1px solid #dee2e6;
+}
+
+.blog-detail img {
+  transition: transform 0.3s ease;
+}
+
+.blog-detail img:hover {
+  transform: scale(1.02);
+}
+
+/* Related blogs */
+.hover-primary {
+  transition: color 0.3s ease;
+}
+
+.hover-primary:hover {
+  color: var(--brandColor) !important;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.5;
+  max-height: 3em;
+}
+
+/* Cards */
+.card {
+  transition: all 0.3s ease;
+  border-radius: 8px !important;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+}
+
+.card-title a {
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+/* Category links */
+.list-group-item a {
+  transition: all 0.3s ease;
+  padding-left: 0.5rem;
+}
+
+.list-group-item a:hover {
+  padding-left: 1rem;
+  background: linear-gradient(90deg, rgba(0, 167, 204, 0.05) 0%, transparent 100%);
+}
+
+.list-group-item a:hover i {
+  transform: translateX(3px);
+}
+
+.list-group-item i {
+  transition: transform 0.3s ease;
+}
+
+
+
+/* Responsive */
+@media (max-width: 991.98px) {
+  .ps-lg-4 {
+    padding-left: 0 !important;
+    margin-top: 2rem;
+  }
+
+  .blog-detail h1 {
+    font-size: 1.5rem !important;
+  }
+
+  .blog-content {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .blog-detail .d-flex.align-items-center {
+    flex-direction: column;
+    align-items: flex-start !important;
+  }
+
+  .blog-detail .d-flex.align-items-center > div {
+    margin-bottom: 0.5rem;
+  }
+
+  .blog-detail h1 {
+    font-size: 1.3rem !important;
+  }
+}
+
+
+

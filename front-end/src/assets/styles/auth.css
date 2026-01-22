@@ -1,0 +1,61 @@
+.login-wrapper {
+  min-height: 100vh;
+  padding: 0;
+  background-color: #f4fefe;
+}
+
+/* LEFT */
+.login-left {
+  background-image: url("~/assets/img/auth-bg.jpg");
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.login-left::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+/* FORM */
+.login-form {
+  background: #fff;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.form-control {
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.btn-main {
+  background-color: #2DC0C0;
+  color: #fff;
+  border-radius: 30px;
+  padding: 12px;
+  font-weight: 600;
+  border: none;
+}
+
+.btn-main:hover {
+  background-color: #26a9a9;
+}
+
+.text-link {
+  color: #2DC0C0;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.text-link:hover {
+  text-decoration: underline;
+}
+
+/* React Datepicker Reset */
+.react-datepicker-wrapper {
+  width: 100%;
+  display: block;
+}

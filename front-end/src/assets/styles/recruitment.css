@@ -1,0 +1,78 @@
+body {
+  background-color: #f4f7f6;
+  font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.recruitment-card {
+  background: #fff;
+  transition: transform 0.3s ease;
+}
+h1 {
+  color: #fff;
+}
+.header-banner {
+  background: var(--brandColor);
+}
+
+h2.display-5 {
+  color: #fff !important;
+}
+
+.section-title {
+  font-size: 1.4rem;
+  letter-spacing: 0.5px;
+  border-left: 5px solid var(--brandColor) !important;
+}
+
+ul li strong {
+  color: var(--brandColor);
+}
+
+.custom-list li {
+  position: relative;
+  padding-left: 25px;
+  margin-bottom: 12px;
+}
+
+.custom-list li::before {
+  content: "\f058"; /* FontAwesome Circle Check */
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  position: absolute;
+  left: 0;
+  color: var(--brandColor);
+}
+
+.job-desc-list li,
+.list-unstyled {
+  margin-bottom: 10px;
+  color: var(--textLight);
+}
+
+.btn-primary {
+  background: var(--brandColor);
+  border: none;
+  transition: all 0.3s;
+}
+
+.btn-primary:hover {
+  background: var(--info);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(13, 110, 253, 0.4);
+}
+
+.fw-bold.page-recruitment,
+.far,
+.fas {
+  color: var(--brandColor) !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .header-banner h1 {
+    font-size: 1.8rem;
+  }
+  .section-title {
+    font-size: 1.2rem;
+  }
+}
