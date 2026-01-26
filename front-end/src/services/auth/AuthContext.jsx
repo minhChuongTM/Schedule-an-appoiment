@@ -1,7 +1,7 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 import api from "../api";
 
-const AuthContext = createContext();
+const AuthContext = createContext(); // createContext dùng để tạo ra một context mới
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
